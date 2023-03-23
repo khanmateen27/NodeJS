@@ -1,15 +1,20 @@
 import * as express from "express";
 
-//create the module
+//creating the Module
 let transactions:any = express.Router();
 
-//creating authorization
-let auth:any = (req:any , res:any , next:any)=>{
-    //read the headers
+//creating the GET Request
+//default GET Request
+transactions.get("/" , (req:any , res:any):any =>{
+    res.status(200).json({message : "Welcome to the Transactions Module"});
+});
+
+//creating authentication 
+let auth:any = (req:any , res:any , next:any):any =>{
     let allHeaders:any = req.headers;
-    //read the token
     let token:any = allHeaders.token;
-    if(token === "mateen"){
+    console.log("Token",token) 
+    if(token === 'mateen'){
         next(); //success
     }
     else{
@@ -17,23 +22,21 @@ let auth:any = (req:any , res:any , next:any)=>{
     }
 };
 
-//creating second authorization
-let autho:any = (req:any , res:any , next:any)=>{
-    //reading the headers
-    let allHeaders:any = autho.headers;
-    //reading the token
-    let wish:any = allHeaders.token;
-    if(wish === "hello"){
+let authentication:any = (req:any , res:any , next:any):any=>{
+    let allHeaders:any = req.headers;
+    let wish:any = allHeaders.wish;
+    console.log(wish)
+    if(wish === 'hello'){
         next();
     }
     else{
-        res.status(400).json({auth : "failed"});
+        res.status(400).json({authentication : "failed"});
     }
 };
 
-//creating a GET Request
-transactions.get("/login" , [autho] , (req:any , res:any):any=>{
-    res.status(200).json({message : "Welcome to the Transactions module!"});
+//GET Request
+transactions.get("/login" , [auth , authentication] , (req:any , res:any):any =>{
+    res.status(200).json({message : "Welcome to the Transactions Login Module"});
 });
 
 export default transactions;
